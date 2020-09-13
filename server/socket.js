@@ -1,6 +1,18 @@
 var net = require('net');
 var userSocket = null;
 var port = 8001;
+if(process.env.port !== undefined){
+	port = process.env.port;
+	console.log('port overridden by env to be ' + port);
+}
+if (process.argv.length > 2) {
+	let portFormArgs = parseInt(process.argv[2]);
+	if(!isNaN(portFormArgs)) {
+		port = portFormArgs;
+		console.log('port overridden by args to be ' + port);
+	}
+}
+var port = process.env.port || 8001;
 var onNewMessageHandler = null;
 var disconnectHander = null;
 
