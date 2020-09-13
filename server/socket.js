@@ -12,7 +12,7 @@ if (process.argv.length > 2) {
 		console.log('port overridden by args to be ' + port);
 	}
 }
-var port = process.env.port || 8001;
+
 var onNewMessageHandler = null;
 var disconnectHander = null;
 
