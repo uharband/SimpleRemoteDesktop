@@ -68,7 +68,8 @@ module.exports.start = function( codecWidth, codecHeight, bandwidth, fps, sdl) {
 	encoder.initSync(options);
 	running = true;
 
-	getFrame();
+	//getFrame();
+	getSingleFrame();
 }
 
 
@@ -87,7 +88,7 @@ function getFrame() {
 			free();
 		} else {
 
-			//TODO android patch 
+			//TODO android patch
 			lb.writeInt32BE(frame.length);
 			frameNumberBuffer.writeInt32BE(frameCounter++);
 			socket.getSocket().write(frameNumberBuffer, function(){
@@ -106,6 +107,39 @@ function getFrame() {
 									});
 							});
 					});
+
+
+
+		}
+	}
+}
+
+function getSingleFrame() {
+	var initTime = new Date();
+
+	var img = x11.getImageSync();
+
+	var frame = encoder.encodeFrameSync(img.data);
+
+	if (frame !== undefined) {
+		frameSend = false;
+		var frameTime = new Date();
+
+		if (socket.getSocket() == null) {
+			free();
+		} else {
+
+			//TODO android patch
+			lb.writeInt32BE(frame.length);
+			frameNumberBuffer.writeInt32BE(frameCounter++);
+			socket.getSocket().write(frameNumberBuffer, function(){
+				//console.log('sending frame number : '+frameCounter);
+				socket.getSocket().write(lb, function() {
+					socket.getSocket().write(frame, function() {
+
+					});
+				});
+			});
 
 
 
@@ -182,3 +216,5 @@ function keypress(keycode, isDown) {
 		if( keycode !== undefined) x11.keyPressWithKeysym(parseInt(keyCode,10), isDown);
 	};
 }
+
+module.exports.getSingleFrame = getSingleFrame;

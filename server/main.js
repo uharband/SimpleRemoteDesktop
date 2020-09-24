@@ -1,6 +1,11 @@
+if(process.platform === 'win32'){
+    require('./mock');
+}
+
 var capture = require('./capture');
 var socket = require('./socket');
 var discovery = require("./DiscoveryService.js");
+var server = require('./server');
 
 socket.registerMessageHandler(onNewMessage);
 socket.registerdisconnectHander(capture.free);
