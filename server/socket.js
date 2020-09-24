@@ -13,6 +13,8 @@ if (process.argv.length > 2) {
 	}
 }
 
+console.log('capture port is ' + port);
+
 var onNewMessageHandler = null;
 var disconnectHander = null;
 
