@@ -4,6 +4,12 @@ const socket = require("./socket");
 const SDLKey = require('./SDLKeysymToX11Keysym');
 const keyLoger = require('./keyLoger');
 
+if (process.argv.length > 3) {
+	if(process.argv[3].toLowerCase() === 'singleframe'){
+		global.singleFrame = true;
+	}
+}
+
 var lb = Buffer.allocUnsafe(4);
 var running = false;
 var frameNumberBuffer = Buffer.allocUnsafe(4);
@@ -58,7 +64,7 @@ module.exports.start = function( codecWidth, codecHeight, bandwidth, fps, sdl) {
 	frameCounter = 0;
 
 	x11.init();
-	if(options.sdl == 1) SDLKey.SDLKeyToKeySym_init();
+	if (options.sdl == 1) SDLKey.SDLKeyToKeySym_init();
 
 	var img = x11.getImageSync();
 	options.inputWidth = img.width;
@@ -68,9 +74,14 @@ module.exports.start = function( codecWidth, codecHeight, bandwidth, fps, sdl) {
 	encoder.initSync(options);
 	running = true;
 
-	//getFrame();
-	getSingleFrame();
-}
+	if (global.singleFrame) {
+		console.log((new Date()).toISOString() + ' getting single frame');
+		getSingleFrame();
+	}
+	else
+		getFrame();
+
+};
 
 
 function getFrame() {
