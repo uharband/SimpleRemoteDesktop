@@ -10,6 +10,11 @@ function mouseMove(x,y){
 
 }
 
+function mouseButton(button, isDown){
+
+}
+
 module.exports.init = init;
 module.exports.getImageSync = getImageSync;
+module.exports.mouseButton = mouseButton;
 module.exports.mouseMove = mouseMove;

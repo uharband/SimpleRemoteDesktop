@@ -36,8 +36,13 @@ function freeDesktop() {
 
 function freeEncoder() {
 	console.log("freeing encoder");
-	var encoderModuleName = require.resolve('node-avcodec-h264-encoder');
-	delete require.cache[encoderModuleName];
+
+	/* changed for running on windows.. */
+	if(process.platform !== 'win32'){
+		var encoderModuleName = require.resolve('node-avcodec-h264-encoder');
+		delete require.cache[encoderModuleName];
+	}
+
 }
 
 function free() {
