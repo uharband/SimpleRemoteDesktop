@@ -88,7 +88,7 @@ module.exports.start = function( codecWidth, codecHeight, bandwidth, fps, sdl) {
 
 };
 
-
+let lastSentTime = new Date();
 function getFrame() {
 	var initTime = new Date();
 
@@ -108,9 +108,11 @@ function getFrame() {
 			lb.writeInt32BE(frame.length);
 			frameNumberBuffer.writeInt32BE(frameCounter++);
 			socket.getSocket().write(frameNumberBuffer, function(){
-					//console.log('sending frame number : '+frameCounter);
 					socket.getSocket().write(lb, function() {
 							socket.getSocket().write(frame, function() {
+									let now = new Date();
+									console.log(now.toISOString() + ' sent frame number : '+ frameCounter + ' delta from last frame: ' + (now.getTime() - lastSentTime.getTime()));
+									lastSentTime = now;
 									var t = new Date() - initTime;
 									if(running) {
 									setTimeout(getFrame, options.period - t);
